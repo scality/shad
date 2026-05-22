@@ -1,14 +1,14 @@
 # SHAD
 
 <p align="center">
-  <img src="Figures/overview.png" width="700"/>
+  <img src="Figures/Overview.png" width="700"/>
 </p>
 
 **SHAD** (Scality High-dimensional Anomaly Detection benchmark) is a benchmark built from 
 Scality RING distributed storage platform. SHAD includes both normal and anomalous series, with curated anomalies affecting different architectural layers. 
 The dataset comprises 144 high-dimensional time series with per-dimension labels and detailed documentation describing anomaly type, affected components, and severity. 
 The XML annotations also contains a detailed documentation of each of the 171 dimensions characterizing the series, enabling explicit mapping of each sensor to system components and roles. 
-## Licence
+## License
 The source code and datasets associated with this research project are released under the AGPL-3.0-only license.
 By using, modifying, or redistributing this material, you agree to comply with the terms of the license.
 
@@ -270,7 +270,24 @@ The metrics for devices are:
 
 
 # Code
+## Accessing the XML knowledge
+The code in `Scripts/queryXML` shows examples of how to query and explore the XML files generated for each time series in SHAD.
 
+Each XML file contains structured information about:
+- dataset-level metadata (id, anomaly presence, type, criticality)
+- per-dimension metrics
+- anomaly events with temporal and structural information
+- relationships between affected dimensions
+
+---
+
+The script provides, for a given time series, an example of how to (i) retrieve the global information, (ii) extract all the metric names, (iii) get all dimensions affected by an anomaly on a given store, (iv) get info of the degradation (if present) for a particular dimension, and (v) get all the dimensions affected by the same anomaly of the analyzed one. 
+
+##  TS Representations
+The codes in `Scripts/generate_images` and `Scripts/compute_features` allows to generate the time series image and catch22 representations, respectively.  The codes' outputs are stored in the Representation folder. For images, there is a single png image per time series, while all the catch22 features are stored in a single CSV file. These representations are then used for the LLM interpretability experiment. 
+
+## Anomaly Detection
 For the implementation of anomaly detectors, we refer the readers to the [TSB-AD](https://github.com/TheDatumOrg/TSB-AD) benchmark. 
 
-
+## Interpretability
+The code in `Scripts/interpretability_main` runs the interpretability experiment for the 3 different types of representations. To run the experiment, it is necessary to store the MISTRAL API key in a .env file (MISTRAL_API_KEY=XXX) that is then loaded in the experiment script. 
