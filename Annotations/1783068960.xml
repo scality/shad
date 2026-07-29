@@ -1,0 +1,871 @@
+<?xml version='1.0' encoding='utf-8'?>
+<dataset>
+  <id>1783068960</id>
+  <anomaly_presence>false</anomaly_presence>
+  <category>None</category>
+  <type>None</type>
+  <criticality>None</criticality>
+  <textual_explanation>Nominal Workload</textual_explanation>
+  <dimensions>
+    <dimension>
+      <name>metric_timestamp</name>
+      <description>Timestamp of the recorded telemetry.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>cpu_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of CPU time not idle averaged across all servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>cpu_load_ratio</name>
+      <description>(ratio) (&gt;= 0) CPU load average across all servers and normalized by CPU count. Can exceed 1.0 when the run queue is longer than the CPU count.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>memory_usage_ratio</name>
+      <description> Ratio (0-1) Fraction of total used memory averaged across all servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>network_in_bytes</name>
+      <description>(bytes/s) ALL inncoming network throughput for this server, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>network_out_bytes</name>
+      <description>(bytes/s) ALL outgoing network throughput for this server, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>objects_count</name>
+      <description>(count) Number of objects stored on the RING, including replicas.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>objects_unique_count</name>
+      <description>(count) Number of unique objects stored on the RING, deduplicated to count only logical objects regardless of replica count.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>objects_missing_count</name>
+      <description>(count) Number of objects with missing or OOS chunks.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>capacity_disk_unique_tb</name>
+      <description>(TB) Total stored data of unique objects (before replication). Reflects logical data size.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>capacity_disk_stored_tb</name>
+      <description>(TB) Total stored data including replicas.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>capacity_disk_used_tb</name>
+      <description>(TB) Total actual disk space consumed, including various overheads beyond stored object sizes.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>capacity_disk_available_tb</name>
+      <description>(TB) Total free disk space on the RING.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>capacity_disk_total_tb</name>
+      <description>(TB) Total physical disk capacity. Static unless disks are removed from the RING.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>disk_read_bytes</name>
+      <description>(bytes/s) Total disk read throughput summed across all disks.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>disk_write_bytes</name>
+      <description>(bytes/s) Total disk write throughput summed across all disks.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>disk_io_time_seconds</name>
+      <description>(s/s) (0-1) Fraction of time spent on I/O averaged across all disks. A value of 1.0 implies a device spent 100% of its time doing I/O (fully saturated).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>disk_errors_count</name>
+      <description>Overall error count across all disks.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_errors_5xx</name>
+      <description>(errors/s) Rate of HTTP 5xx server errors across all S3 services.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_get_operations</name>
+      <description>(ops/s) GET request rate.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_post_operations</name>
+      <description>(ops/s) POST request rate (near constant since we are not using multipart uploads in our nominal workload).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_put_operations</name>
+      <description>(ops/s) PUT request rate.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_delete_operations</name>
+      <description>(ops/s) DELETE request rate.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_head_operations</name>
+      <description>(ops/s) HEAD request rate (metadata lookups).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_throughput_in_bytes</name>
+      <description>(bytes/s) Client-to-S3 data rate.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_throughput_out_bytes</name>
+      <description>(bytes/s) S3-to-client data rate (dominates throughput_in in our GET heavy nominal workload).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_get_latency</name>
+      <description>(seconds) 95th percentile GET request duration.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_post_latency</name>
+      <description>(seconds) 95th percentile POST request duration. Near-constant in our nominal workload.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_put_latency</name>
+      <description>(seconds) 95th percentile PUT request duration.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_delete_latency</name>
+      <description>(seconds) 95th percentile DELETE request duration.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>s3_request_head_latency</name>
+      <description>(seconds) 95th percentile HEAD request duration.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-balance_balanced_tasks</name>
+      <description>(tasks/s) Rate of chunks actually rebalanced on store1</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-balance_balanced_tasks</name>
+      <description>(tasks/s) Rate of chunks actually rebalanced on store2</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-balance_balanced_tasks</name>
+      <description>(tasks/s) Rate of chunks actually rebalanced on store3</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-balance_scanned_tasks</name>
+      <description>(tasks/s) Rate of balance scanning on store1. Redistributes data when disk usage is uneven. May activate after disk failure recovery.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-balance_scanned_tasks</name>
+      <description>(tasks/s) Rate of balance scanning on store2. Redistributes data when disk usage is uneven. May activate after disk failure recovery.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-balance_scanned_tasks</name>
+      <description>(tasks/s) Rate of balance scanning on store3. Redistributes data when disk usage is uneven. May activate after disk failure recovery.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-cpu_load_ratio</name>
+      <description>(ratio) (&gt;= 0) CPU load average normalized by CPU count for store1. Can exceed 1.0 under saturation.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-cpu_load_ratio</name>
+      <description>(ratio) (&gt;= 0) CPU load average normalized by CPU count for store2. Can exceed 1.0 under saturation.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-cpu_load_ratio</name>
+      <description>(ratio) (&gt;= 0) CPU load average normalized by CPU count for store3. Can exceed 1.0 under saturation.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-cpu_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of CPU time not idle for store1.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-cpu_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of CPU time not idle for store2.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-cpu_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of CPU time not idle for store3.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-errors_received</name>
+      <description>(errors/s) Rate of failed inbound RING operations on store1.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-errors_received</name>
+      <description>(errors/s) Rate of failed inbound RING operations on store2.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-errors_received</name>
+      <description>(errors/s) Rate of failed inbound RING operations on store3.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-errors_sent</name>
+      <description>(errors/s) Rate of failed outbound RING operations on store1.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-errors_sent</name>
+      <description>(errors/s) Rate of failed outbound RING operations on store2.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-errors_sent</name>
+      <description>(errors/s) Rate of failed outbound RING operations on store3.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-latency_received_milliseconds</name>
+      <description> (ms) Average local processing time for RING operations that store1 receives.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-latency_received_milliseconds</name>
+      <description> (ms) Average local processing time for RING operations that store2 receives.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-latency_received_milliseconds</name>
+      <description> (ms) Average local processing time for RING operations that store3 receives.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-latency_sent_milliseconds</name>
+      <description>(ms) Average round-trip time for RING operations that store1 sends.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-latency_sent_milliseconds</name>
+      <description>(ms) Average round-trip time for RING operations that store2 sends.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-latency_sent_milliseconds</name>
+      <description>(ms) Average round-trip time for RING operations that store3 sends.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-memory_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of total used memory for store1.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-memory_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of total used memory for store2.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-memory_usage_ratio</name>
+      <description>(ratio) (0-1) Fraction of total used memory for store3.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-network_in_bytes</name>
+      <description>(bytes/s) ALL incoming network throughput for store1, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-network_in_bytes</name>
+      <description>(bytes/s) ALL incoming network throughput for store2, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-network_in_bytes</name>
+      <description>(bytes/s) ALL incoming network throughput for store3, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-network_out_bytes</name>
+      <description>(bytes/s) ALL outgoing network throughput for store1, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-network_out_bytes</name>
+      <description>(bytes/s) ALL outgoing network throughput for store2, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-network_out_bytes</name>
+      <description>(bytes/s) ALL outgoing network throughput for store3, including S3 client traffic, RING inter-node traffic, monitoring, etc.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-operations_received</name>
+      <description>(ops/s) Rate of internal RING operations that store1 receives from other servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-operations_received</name>
+      <description>(ops/s) Rate of internal RING operations that store2 receives from other servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-operations_received</name>
+      <description>(ops/s) Rate of internal RING operations that store3 receives from other servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-operations_sent</name>
+      <description>(ops/s) Rate of internal RING operations that store1 sends to other servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-operations_sent</name>
+      <description>(ops/s) Rate of internal RING operations that store2 sends to other servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-operations_sent</name>
+      <description>(ops/s) Rate of internal RING operations that store3 sends to other servers.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-rebuild_rebuilt_tasks</name>
+      <description>(tasks/s) Rate of chunks actually rebuilt on store1.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-rebuild_rebuilt_tasks</name>
+      <description>(tasks/s) Rate of chunks actually rebuilt on store2.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-rebuild_rebuilt_tasks</name>
+      <description>(tasks/s) Rate of chunks actually rebuilt on store3.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-rebuild_scanned_tasks</name>
+      <description>(tasks/s) Rate of repair scanning for store1. Fixes data integrity issues (corrupted chunks, checksum mismatches).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-rebuild_scanned_tasks</name>
+      <description>(tasks/s) Rate of repair scanning for store2. Fixes data integrity issues (corrupted chunks, checksum mismatches).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-rebuild_scanned_tasks</name>
+      <description>(tasks/s) Rate of repair scanning for store3. Fixes data integrity issues (corrupted chunks, checksum mismatches).</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-repair_repaired_tasks</name>
+      <description>(tasks/s) Rate of chunks actually repaired on store1.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-repair_repaired_tasks</name>
+      <description>(tasks/s) Rate of chunks actually repaired on store2.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-repair_repaired_tasks</name>
+      <description>(tasks/s) Rate of chunks actually repaired on store3.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-repair_scanned_tasks</name>
+      <description>(tasks/s) Rate of balance scanning on store1. Redistributes data when disk usage is uneven. May activate after disk failure recovery.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-repair_scanned_tasks</name>
+      <description>(tasks/s) Rate of balance scanning on store2. Redistributes data when disk usage is uneven. May activate after disk failure recovery.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-repair_scanned_tasks</name>
+      <description>(tasks/s) Rate of balance scanning on store3. Redistributes data when disk usage is uneven. May activate after disk failure recovery.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-throughput_received_bytes</name>
+      <description>(bytes/s) Data payload received by store1 via RING operations.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-throughput_received_bytes</name>
+      <description>(bytes/s) Data payload received by store2 via RING operations.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-throughput_received_bytes</name>
+      <description>(bytes/s) Data payload received by store3 via RING operations.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-throughput_sent_bytes</name>
+      <description>(bytes/s) Data payload (object chunks) sent by store1 via RING operations.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-throughput_sent_bytes</name>
+      <description>(bytes/s) Data payload (object chunks) sent by store2 via RING operations.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-throughput_sent_bytes</name>
+      <description>(bytes/s) Data payload (object chunks) sent by store3 via RING operations.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-root-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-root-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-root-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd01-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd02-disk_io_time_seconds</name>
+      <description>(s/s) (0–1) Fraction of time spent on I/O. A value approaching 1.0 implies the disk is saturated.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-root-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-root-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-root-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd01-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd02-disk_read_bytes</name>
+      <description>(bytes/s) Disk read throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-root-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-root-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-root-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd01-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd02-disk_usage_ratio</name>
+      <description>(ratio) (0–1) Disk space space utilization.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g1disk02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-g2disk02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-root-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store1-ssd02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g1disk02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-g2disk02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-root-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store2-ssd02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g1disk02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-g2disk02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-root-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd01-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+    <dimension>
+      <name>store3-ssd02-disk_write_bytes</name>
+      <description>(bytes/s) Disk write throughput.</description>
+      <anomalies></anomalies>
+    </dimension>
+  </dimensions>
+</dataset>
