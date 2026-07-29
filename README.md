@@ -1,18 +1,4 @@
-# SHAD
-
-<p align="center">
-  <img src="Figures/Overview.png" width="700"/>
-</p>
-
-**SHAD** (Scality High-dimensional Anomaly Detection benchmark) is a benchmark built from 
-Scality RING distributed storage platform. SHAD includes both normal and anomalous series, with curated anomalies affecting different architectural layers. 
-The dataset comprises 144 high-dimensional time series with per-dimension labels and detailed documentation describing anomaly type, affected components, and severity. 
-The XML annotations also contains a detailed documentation of each of the 171 dimensions characterizing the series, enabling explicit mapping of each sensor to system components and roles. 
-## License
-The source code and datasets associated with this research project are released under the AGPL-3.0-only license.
-By using, modifying, or redistributing this material, you agree to comply with the terms of the license.
-
-# Repository Overview
+Review version of the SHAD dataset.
 
 `Dataset/` contains all labeled time series, grouped by experiment type, indexed by experiment id.
 
@@ -35,6 +21,80 @@ In what follows we provide the list of experiments per anomaly type.
 - 1773521150, ran on quarry5 starting at 2026-03-14 20:45
 - 1773521156, ran on quarry7 starting at 2026-03-14 20:45
 - 1773680909, ran on quarry 8 starting at 2026-03-16 17:08
+
+### Additional Nominal Experiments
+
+- 1780480777, ran on quarry starting at 2026-06-03 09:59
+- 1780480782, ran on quarry2 starting at 2026-06-03 09:59
+- 1780480787, ran on quarry3 starting at 2026-06-03 09:59
+- 1780650581, ran on quarry starting at 2026-06-05 09:09
+- 1780650584, ran on quarry2 starting at 2026-06-05 09:09
+- 1780650586, ran on quarry3 starting at 2026-06-05 09:09
+- 1780908507, ran on quarry starting at 2026-06-08 08:48
+- 1780908509, ran on quarry2 starting at 2026-06-08 08:48
+- 1780908511, ran on quarry3 starting at 2026-06-08 08:48
+- 1781007723, ran on quarry starting at 2026-06-09 12:22
+- 1781007725, ran on quarry2 starting at 2026-06-09 12:22
+- 1781007727, ran on quarry3 starting at 2026-06-09 12:22
+- 1781079773, ran on quarry starting at 2026-06-10 08:22
+- 1781079775, ran on quarry2 starting at 2026-06-10 08:22
+- 1781079777, ran on quarry3 starting at 2026-06-10 08:22
+- 1781185330, ran on quarry starting at 2026-06-11 13:42
+- 1781185333, ran on quarry2 starting at 2026-06-11 13:42
+- 1781185335, ran on quarry3 starting at 2026-06-11 13:42
+- 1781256852, ran on quarry starting at 2026-06-12 09:34
+- 1781256854, ran on quarry2 starting at 2026-06-12 09:34
+- 1781256856, ran on quarry3 starting at 2026-06-12 09:34
+- 1781514760, ran on quarry starting at 2026-06-15 09:12
+- 1781514764, ran on quarry2 starting at 2026-06-15 09:12
+- 1781514767, ran on quarry3 starting at 2026-06-15 09:12
+- 1781621786, ran on quarry starting at 2026-06-16 14:56
+- 1781621789, ran on quarry2 starting at 2026-06-16 14:56
+- 1781621793, ran on quarry3 starting at 2026-06-16 14:56
+- 1781697075, ran on quarry starting at 2026-06-17 11:51
+- 1781697078, ran on quarry2 starting at 2026-06-17 11:51
+- 1781697081, ran on quarry3 starting at 2026-06-17 11:51
+- 1781790629, ran on quarry starting at 2026-06-18 13:50
+- 1781790631, ran on quarry2 starting at 2026-06-18 13:50
+- 1781790633, ran on quarry3 starting at 2026-06-18 13:50
+- 1781871082, ran on quarry starting at 2026-06-19 12:11
+- 1781871084, ran on quarry2 starting at 2026-06-19 12:11
+- 1781871086, ran on quarry3 starting at 2026-06-19 12:11
+- 1782129149, ran on quarry starting at 2026-06-22 11:52
+- 1782129152, ran on quarry2 starting at 2026-06-22 11:52
+- 1782129154, ran on quarry3 starting at 2026-06-22 11:52
+- 1782209424, ran on quarry starting at 2026-06-23 10:10
+- 1782209429, ran on quarry2 starting at 2026-06-23 10:10
+- 1782209437, ran on quarry3 starting at 2026-06-23 10:10
+- 1782290038, ran on quarry starting at 2026-06-24 08:33
+- 1782290044, ran on quarry2 starting at 2026-06-24 08:34
+- 1782290047, ran on quarry3 starting at 2026-06-24 08:34
+- 1782391919, ran on quarry starting at 2026-06-25 12:51
+- 1782391921, ran on quarry2 starting at 2026-06-25 12:52
+- 1782391924, ran on quarry3 starting at 2026-06-25 12:52
+- 1782463369, ran on quarry starting at 2026-06-26 08:42
+- 1782463371, ran on quarry2 starting at 2026-06-26 08:42
+- 1782463373, ran on quarry3 starting at 2026-06-26 08:42
+- 1782725684, ran on quarry starting at 2026-06-29 09:34
+- 1782725686, ran on quarry2 starting at 2026-06-29 09:34
+- 1782725688, ran on quarry3 starting at 2026-06-29 09:34
+- 1782814250, ran on quarry3 starting at 2026-06-30 10:10
+- 1782822554, ran on quarry starting at 2026-06-30 12:29 (rerun of aborted run 1782811570)
+- 1782900715, ran on quarry starting at 2026-07-01 10:11
+- 1782900776, ran on quarry2 starting at 2026-07-01 10:12
+- 1782900741, ran on quarry3 starting at 2026-07-01 10:12
+- 1782993286, ran on quarry starting at 2026-07-02 11:54
+- 1782993287, ran on quarry2 starting at 2026-07-02 11:54
+- 1782993289, ran on quarry3 starting at 2026-07-02 11:54
+- 1783068960, ran on quarry starting at 2026-07-03 08:56
+- 1783068962, ran on quarry2 starting at 2026-07-03 08:56
+- 1783068964, ran on quarry3 starting at 2026-07-03 08:56
+- 1783326897, ran on quarry starting at 2026-07-06 08:34
+- 1783326899, ran on quarry2 starting at 2026-07-06 08:34
+- 1783326902, ran on quarry3 starting at 2026-07-06 08:35
+- 1783513609, ran on quarry starting at 2026-07-08 12:26
+- 1783513611, ran on quarry2 starting at 2026-07-08 12:26
+- 1783513612, ran on quarry3 starting at 2026-07-08 12:26
 
 ### Single Disk Failure
 - 1773343796, ran on quarry4 starting at 2026-03-12 19:29, with a failure on store 1 g2disk01 at time 3h30m for 1h30m
