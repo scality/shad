@@ -1,4 +1,22 @@
-Review version of the SHAD dataset.
+# SHAD
+
+<p align="center">
+  <img src="Figures/Overview.png" width="700"/>
+</p>
+
+**SHAD** (Scality High-dimensional Anomaly Detection benchmark) is a benchmark built from the
+Scality RING distributed storage platform. SHAD includes both normal and anomalous series, with curated anomalies affecting different architectural layers.
+The dataset comprises 215 high-dimensional time series with per-dimension labels and detailed documentation describing anomaly type, affected components, and severity.
+The XML annotations also contain a detailed documentation of each of the 171 dimensions characterizing the series, enabling explicit mapping of each sensor to system components and roles.
+
+*Review version of the SHAD dataset.*
+
+## License
+The source code and datasets associated with this research project are released under the AGPL-3.0-only license.
+By using, modifying, or redistributing this material, you agree to comply with the terms of the license.
+The full license text is in [LICENSE](LICENSE).
+
+# Repository Overview
 
 `Dataset/` contains all labeled time series, grouped by experiment type, indexed by experiment id.
 
