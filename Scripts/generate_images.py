@@ -35,7 +35,7 @@ def plot_multivariate_ts(file_path, output_dir):
         return
 
     try:
-        df = pd.read_csv(file_path).dropna()
+        df = pd.read_csv(file_path)
     except Exception as e:
         print(f"Skipping {ts_name}: {e}")
         return
@@ -79,7 +79,7 @@ def plot_multivariate_ts(file_path, output_dir):
         ax.set_xticks([0, len(values) - 1])
         ax.set_xticklabels([0, len(values) - 1], fontsize=5)
 
-        ymin, ymax = values.min(), values.max()
+        ymin, ymax = np.nanmin(values), np.nanmax(values)
         yticks = np.linspace(ymin, ymax, 3)
         ax.set_yticks(yticks)
         ax.set_yticklabels([f"{y:.1f}" for y in yticks], fontsize=5)
