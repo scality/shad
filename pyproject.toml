@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shad-benchmark"
+version = "1.0.0"
+description = "SHAD: Scality High-dimensional Anomaly Detection benchmark - data loaders and utilities"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "AGPL-3.0-only" }
+authors = [
+  { name = "Roberto Stanzione" },
+  { name = "Jules Barbe" },
+  { name = "Magali Parrino" },
+  { name = "Jérémie Fourmann" },
+  { name = "Paul Boniol" },
+]
+keywords = ["time series", "anomaly detection", "benchmark", "explainability", "interpretability", "AIOps"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["numpy>=1.21", "pandas>=1.4"]
+
+[project.optional-dependencies]
+plot = ["matplotlib>=3.5"]
+representations = ["matplotlib>=3.5", "pycatch22"]
+interpretability = ["mistralai", "python-dotenv", "pycatch22"]
+dev = ["pytest", "matplotlib>=3.5"]
+
+[project.urls]
+Homepage = "https://scality.github.io/shad/"
+Repository = "https://github.com/scality/shad"
+
+[tool.setuptools]
+packages = ["shad"]

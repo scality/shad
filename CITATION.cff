@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use SHAD, please cite the NeurIPS 2026 paper below."
+title: "SHAD: Scality High-dimensional Anomaly Detection benchmark"
+type: dataset
+license: AGPL-3.0-only
+repository-code: "https://github.com/scality/shad"
+url: "https://scality.github.io/shad/"
+authors:
+  - family-names: Stanzione
+    given-names: Roberto
+  - family-names: Barbe
+    given-names: Jules
+  - family-names: Parrino
+    given-names: Magali
+  - family-names: Fourmann
+    given-names: Jérémie
+  - family-names: Boniol
+    given-names: Paul
+keywords:
+  - time series
+  - anomaly detection
+  - explainability
+  - interpretability
+  - benchmark
+preferred-citation:
+  type: conference-paper
+  title: "Detect, Explain, Interpret: An End-to-End Benchmark for Time Series Anomaly Detection, Explainability and Interpretability"
+  authors:
+    - family-names: Stanzione
+      given-names: Roberto
+    - family-names: Barbe
+      given-names: Jules
+    - family-names: Parrino
+      given-names: Magali
+    - family-names: Fourmann
+      given-names: Jérémie
+    - family-names: Boniol
+      given-names: Paul
+  collection-title: "Advances in Neural Information Processing Systems (NeurIPS), Evaluations and Datasets Track"
+  year: 2026

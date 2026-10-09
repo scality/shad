@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHAD benchmark</title>
+<meta name="description" content="SHAD: a fully annotated benchmark of 215 high-dimensional time series from a real distributed storage system, for anomaly detection, explanation and interpretation (NeurIPS 2026, Evaluations & Datasets track).">
+<meta property="og:title" content="SHAD - Detect, Explain, Interpret">
+<meta property="og:description" content="215 real-world 171-dimensional time series with per-dimension labels and rich semantic annotations.">
+<meta property="og:image" content="assets/img/overview.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a78d6'/%3E%3Cpath d='M5 20 L10 20 L13 11 L17 24 L20 16 L27 16' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .topo text { font: 11px var(--sans); fill: var(--text-2); }
+  .topo .t-strong { fill: var(--text); font-weight: 600; font-size: 12px; }
+  .topo .box { fill: var(--surface); stroke: var(--border); }
+  .topo .srv { fill: var(--surface-2); stroke: var(--border); }
+  .topo .link { stroke: var(--text-3); stroke-width: 1.2; fill: none; }
+  .topo .sn { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+  .topo .nvme { fill: var(--surface); stroke: var(--text-3); }
+  .topo .ssd { fill: var(--surface-3); stroke: var(--text-3); }
+  .topo .lvl { fill: var(--surface); stroke: var(--border); }
+  .topo .lvl-n { font-weight: 700; font-size: 15px; fill: var(--text); }
+  .family-card { border-top: 3px solid var(--c); }
+  .family-card .kicker { font-size: .78rem; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: .06em; }
+  .family-card ul { padding-left: 18px; margin: 8px 0 0; color: var(--text-2); font-size: .92rem; }
+  .family-card .count { font-size: 1.6rem; font-weight: 650; }
+  .results-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .results-tabs button { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: .88rem; font-weight: 500; cursor: pointer; }
+  .results-tabs button[aria-selected="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .result-panel { display: none; } .result-panel.active { display: block; }
+  .bibtex { white-space: pre; font-size: .8rem; }
+  #timeline-wrap { overflow-x: auto; }
+  .xml-snip { font-size: .78rem; max-height: 380px; }
+  .fulltitle { font-size: clamp(1.2rem, 2.2vw, 1.6rem); font-weight: 600; line-height: 1.3; margin: -4px 0 18px; max-width: 820px; letter-spacing: -0.01em; }
+</style>
+</head>
+<body>
+<header id="nav"></header>
+
+<main>
+<!-- ============================================================ HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="venue">NeurIPS 2026 · Evaluations &amp; Datasets Track</div>
+    <h1><span class="hl">Detect, Explain, Interpret.</span></h1>
+    <p class="fulltitle">An end-to-end benchmark for time series anomaly detection, explainability and interpretability</p>
+    <p class="subtitle"><b>SHAD</b> (Scality High-dimensional Anomaly Detection) is a fully annotated benchmark of real-world, 171-dimensional
+      time series collected on a distributed cloud storage system (Scality RING), with per-dimension labels and rich semantic annotations
+      of every injected disk, server and storage node failure.</p>
+    <div class="authors">Roberto Stanzione · Jules Barbe · Magali Parrino · Jérémie Fourmann · Paul Boniol</div>
+    <div class="affils">Inria, ENS, CNRS, PSL University · Scality · EDF</div>
+    <div class="btn-row">
+      <a class="btn primary" href="explorer.html"><span id="ic-explore"></span>Explore the dataset</a>
+      <a class="btn" href="docs.html"><span id="ic-book"></span>Get started</a>
+      <a class="btn" href="https://github.com/scality/shad"><span id="ic-github"></span>Code &amp; data</a>
+      <a class="btn" data-paper-link><span id="ic-paper"></span>Paper</a>
+    </div>
+    <div class="stats" id="hero-stats" aria-label="Key numbers"></div>
+  </div>
+</section>
+
+<!-- ============================================================ WHY -->
+<section class="block" id="why">
+  <div class="container">
+    <div class="eyebrow">Why SHAD</div>
+    <h2>Beyond detection accuracy</h2>
+    <p class="lead">Existing anomaly detection benchmarks only tell <i>when</i> something went wrong. SHAD also records <i>where</i>
+      (which of the 171 sensors are directly affected) and <i>what</i> (type, target component, severity, textual explanation),
+      so that a complete pipeline can be evaluated.</p>
+    <div class="figure" style="margin-bottom:24px"><img src="assets/img/scope.png" alt="Detection, explanation and interpretation of time series anomalies" loading="lazy"></div>
+    <div class="grid-3">
+      <div class="card pillar"><div class="num">1</div><h3>Detection</h3>
+        <p>Locate anomalies in time. Top-level binary labels, compatible with existing benchmarks such as TSB-AD. 18 detectors evaluated with VUS-PR.</p></div>
+      <div class="card pillar"><div class="num">2</div><h3>Explanation</h3>
+        <p>Attribute an anomaly to the dimensions that cause it. Per-dimension labels mark the <i>root cause</i> sensors of every event; evaluated with NDCG.</p></div>
+      <div class="card pillar"><div class="num">3</div><h3>Interpretation</h3>
+        <p>Produce a human-understandable account: type, criticality, affected component. XML annotations provide the ground truth; frozen LLMs evaluated.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ AT A GLANCE -->
+<section class="block" id="glance">
+  <div class="container">
+    <div class="eyebrow">The data at a glance</div>
+    <h2>215 series, 10 scenarios, 3 anomaly families</h2>
+    <p class="lead">Every experiment runs the same GET-heavy S3 workload for ~18 hours (1-minute sampling). Anomalies are injected on top
+      of it and annotated by Scality experts. All statistics below are computed from the released files.</p>
+
+    <div class="card" style="margin-bottom:24px">
+      <p class="chart-title">Every series of SHAD, one row each</p>
+      <p class="chart-sub">Coloured spans are the labelled anomalous periods (top-level label). Hover for details, click to open the series in the explorer.</p>
+      <div class="legend" id="family-legend"></div>
+      <div id="timeline-wrap"><div class="chart" id="chart-timeline"></div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <p class="chart-title">Series per scenario</p>
+        <p class="chart-sub">83 nominal series (training data) and 132 anomalous series.</p>
+        <div class="chart" id="chart-groups"></div>
+      </div>
+      <div class="card">
+        <p class="chart-title">Duration of anomalous periods</p>
+        <p class="chart-sub">Each dot is one labelled anomalous period (minutes, log scale).</p>
+        <div class="chart" id="chart-durations"></div>
+      </div>
+      <div class="card">
+        <p class="chart-title">Fraction of anomalous timestamps</p>
+        <p class="chart-sub">Each dot is one anomalous series (top-level label). Outlined dots above 50% are runs where the injected failure could not be recovered, so a large part of the series is anomalous; they are annotated in the repository and still represent a realistic scenario.</p>        <div class="chart" id="chart-ratio"></div>
+      </div>
+      <div class="card">
+        <p class="chart-title">Number of labelled dimensions</p>
+        <p class="chart-sub">Dimensions with a positive per-dimension label, out of 171 (log scale).</p>
+        <div class="chart" id="chart-dims"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px">
+      <p class="chart-title">Which dimensions are labelled, per scenario?</p>
+      <p class="chart-sub">Share of the series of each scenario in which a dimension carries a positive per-dimension label.
+        Columns are the 171 dimensions, grouped by level. Hover a cell for details.</p>
+      <div class="chart" id="chart-heatmap"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SYSTEM -->
+<section class="block" id="system">
+  <div class="container">
+    <div class="eyebrow">Where the data comes from</div>
+    <h2>A real distributed object store under controlled failures</h2>
+    <p class="lead">Each cluster runs Scality RING with one supervisor and three storage servers. Data placement follows a Chord distributed hash table
+      over 18 software storage nodes; S3 traffic enters through one connector per server. All components expose telemetry, organised into 171 metrics on four levels.</p>
+    <div class="card">
+      <svg class="topo" viewBox="0 0 960 330" role="img" aria-label="Cluster topology: one supervisor, three storage servers each with an S3 connector, six storage nodes, four NVMe data disks, two SSDs and an OS disk; telemetry is organised in 17 platform, 13 S3, 57 server and 84 device metrics.">
+        <rect class="box" x="250" y="8" width="180" height="40" rx="6"/>
+        <text class="t-strong" x="340" y="26" text-anchor="middle">Supervisor</text>
+        <text x="340" y="41" text-anchor="middle">monitoring · warp S3 workload</text>
+        <path class="link" d="M340 48 V62 H110 V80 M340 62 V80 M340 62 H570 V80"/>
+        <g id="servers"></g>
+        <g transform="translate(700,12)">
+          <text class="t-strong" x="0" y="10">Telemetry: 171 dimensions</text>
+          <g id="levels"></g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ ANOMALIES -->
+<section class="block" id="anomalies">
+  <div class="container">
+    <div class="eyebrow">Anomaly scenarios</div>
+    <h2>Realistic failures across architectural layers</h2>
+    <p class="lead">Failures are injected at a chosen time, for a chosen duration, on chosen components. Multi-event scenarios are
+      <i>simultaneous</i> or <i>asynchronous</i> (cascading, rolling or independent); server failures can also be progressive <i>degradations</i>.</p>
+    <div class="figure" style="margin-bottom:24px"><img src="assets/img/overview.png" alt="Composition of SHAD: 83 nominal and 132 anomalous series across single, simultaneous, asynchronous and degradation anomalies" loading="lazy"></div>
+    <div class="grid-3">
+      <div class="card family-card" style="--c:var(--disk)">
+        <div class="kicker">Disk failures</div><div class="count" id="count-Disk"></div>
+        <ul><li>NVMe data disk detached from the OS (driver unbind)</li><li>Single, simultaneous (2–4 disks) or asynchronous</li>
+          <li>Subtle: RING is resilient by design; affects ~4–16 dimensions</li><li>Some disks never recover (permanent loss)</li></ul>
+      </div>
+      <div class="card family-card" style="--c:var(--server)">
+        <div class="kicker">Server failures</div><div class="count" id="count-Server"></div>
+        <ul><li>Network partition of a storage server (tc/netem, 100% loss)</li><li>Single, asynchronous, or linear / staged degradation of delay and loss</li>
+          <li>System-wide impact on most metrics</li></ul>
+      </div>
+      <div class="card family-card" style="--c:var(--snode)">
+        <div class="kicker">Storage node failures</div><div class="count" id="count-SNode"></div>
+        <ul><li>1–3 software storage nodes killed (SIGABRT) on a server</li><li>Single, simultaneous or asynchronous</li>
+          <li>Smallest impact: the DHT redistributes the keyspace</li><li>16 early runs have broken telemetry (flagged)</li></ul>
+      </div>
+    </div>
+    <div class="figure" style="margin-top:24px"><img src="assets/img/anomaly_types.png" alt="Example time series for each anomaly family" loading="lazy"></div>
+    <p class="caption">Examples of disk, server and storage node failures (from the paper).</p>
+  </div>
+</section>
+
+<!-- ============================================================ ANNOTATIONS -->
+<section class="block" id="annotations">
+  <div class="container">
+    <div class="eyebrow">Annotations</div>
+    <h2>Labels you can reason about</h2>
+    <p class="lead">Two label layers ship in every CSV (top-level and per-dimension), and every series has an XML file describing the anomaly
+      and each of the 171 dimensions: what it measures, which event affected it, and which other dimensions were affected by the same event.</p>
+    <div class="figure" style="margin-bottom:24px"><img src="assets/img/annotation_example.png" alt="Example of SHAD time series and annotation" loading="lazy"></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3>In the CSV files</h3>
+        <ul class="muted" style="padding-left:18px;margin:0">
+          <li><code>metric_timestamp</code>: UTC timestamp, 1-minute resolution</li>
+          <li>171 metric columns (platform, S3, server, device levels)</li>
+          <li>171 <code>label_&lt;metric&gt;</code> columns: 1 when the dimension is a root-cause target of an ongoing anomaly</li>
+          <li><code>label</code>: 1 when any anomaly is ongoing (logical OR of the above)</li>
+        </ul>
+        <h3>In the XML files</h3>
+        <ul class="muted" style="padding-left:18px;margin:0">
+          <li>anomaly presence, category, type, criticality, textual explanation</li>
+          <li>per-dimension description, and for anomalous dimensions: onset, duration, targeted store / disk, degradation level, related dimensions</li>
+        </ul>
+        <p style="margin-top:16px"><a href="docs.html#format">Full format documentation →</a></p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Annotations/1773343796.xml <span class="muted small">(excerpt)</span></h3>
+<pre class="xml-snip" data-lang="xml">
+&lt;dataset&gt;
+  &lt;id&gt;1773343796&lt;/id&gt;
+  &lt;anomaly_presence&gt;true&lt;/anomaly_presence&gt;
+  &lt;category&gt;Single&lt;/category&gt;
+  &lt;type&gt;Disk&lt;/type&gt;
+  &lt;criticality&gt;Low&lt;/criticality&gt;
+  &lt;textual_explanation&gt;ran on quarry4 starting at 2026-03-12 19:29,
+    with a failure on store 1 g2disk01 at time 3h30m for 1h30m&lt;/textual_explanation&gt;
+  &lt;dimensions&gt;
+    &lt;dimension&gt;
+      &lt;name&gt;store1-g2disk01-disk_read_bytes&lt;/name&gt;
+      &lt;description&gt;(bytes/s) Disk read throughput.&lt;/description&gt;
+      &lt;anomalies&gt;
+        &lt;anomaly&gt;
+          &lt;offset_minutes&gt;210&lt;/offset_minutes&gt;
+          &lt;duration_minutes&gt;90&lt;/duration_minutes&gt;
+          &lt;store&gt;1&lt;/store&gt;
+          &lt;disk&gt;g2disk01&lt;/disk&gt;
+          &lt;degradation&gt;&lt;/degradation&gt;
+          &lt;related_dimensions&gt;
+            &lt;dimension&gt;store1-g2disk01-disk_io_time_seconds&lt;/dimension&gt;
+            &lt;dimension&gt;store1-g2disk01-disk_read_bytes&lt;/dimension&gt;
+            ...
+</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ RESULTS -->
+<section class="block" id="results">
+  <div class="container">
+    <div class="eyebrow">Baseline results</div>
+    <h2>SHAD is far from solved</h2>
+    <p class="lead">We evaluate every stage of the pipeline. Detection is accurate but not uniformly so, native attributions are no better than random,
+      and zero-shot LLMs cannot interpret the anomalies.</p>
+    <div class="results-tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-panel="p-det">Detection</button>
+      <button role="tab" aria-selected="false" data-panel="p-exp">Explanation</button>
+      <button role="tab" aria-selected="false" data-panel="p-int">Interpretation</button>
+    </div>
+    <div class="result-panel active" id="p-det">
+      <div class="figure"><img src="assets/img/results_detection.png" alt="VUS-PR of 18 anomaly detectors on SHAD"></div>
+      <div class="takeaway">18 detectors (10 semi-supervised trained on the 83 nominal series, 8 unsupervised), VUS-PR with a 25-point buffer.
+        Reconstruction-based models (OmniAnomaly, USAD, AE) and the unsupervised KMeansAD form the top clique, but no method is accurate on every anomaly type:
+        deep models catch faint disk / storage-node signals, while KMeansAD is more robust to system-wide server events.</div>
+    </div>
+    <div class="result-panel" id="p-exp">
+      <div class="figure" style="max-width:820px"><img src="assets/img/results_explainability.png" alt="NDCG of dimension attribution for OA, CNN and KMAD" loading="lazy"></div>
+      <div class="takeaway">Per-dimension contributions of the best detectors (OA, CNN, KMAD) rank the true root-cause dimensions no better than a random baseline (NDCG).
+        Good detection does not translate into diagnostic utility, especially for disk failures that affect only 4–16 dimensions.</div>
+    </div>
+    <div class="result-panel" id="p-int">
+      <div class="figure" style="max-width:760px;margin-bottom:12px"><img src="assets/img/llm_protocol.png" alt="Interpretability evaluation protocol" loading="lazy"></div>
+      <div class="figure"><img src="assets/img/results_interpretability.png" alt="LLM interpretability results with and without supervision" loading="lazy"></div>
+      <div class="takeaway">Five frozen LLMs answer a questionnaire (presence, type, criticality, affected dimension, time location) from Catch22 features, multi-panel
+        images, or image descriptions. Scores stay very low (e.g. ≤ 23% F1 on type, ≤ 4% on dimension localisation); providing detection and explanation
+        outputs helps but does not solve the task.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ START -->
+<section class="block" id="start">
+  <div class="container">
+    <div class="eyebrow">Get started</div>
+    <h2>Three lines to your first series</h2>
+    <div class="grid-2">
+      <div>
+<pre data-lang="bash">
+git clone https://github.com/scality/shad.git
+cd shad
+pip install -e .          # numpy + pandas (add [plot] for matplotlib)
+python -m shad            # prints a summary of the dataset
+</pre>
+<pre data-lang="python">
+from shad import SHAD
+
+ds = SHAD()                          # finds the repository
+s = ds.load("1773343796")            # a single disk failure
+s.data     # (1039, 171) telemetry, UTC DatetimeIndex
+s.labels   # (1039, 171) per-dimension labels
+s.label    # (1039,)     top-level label
+s.events   # annotated events: store1/g2disk01, 210 min, 90 min
+
+train_ids, test_ids = ds.split()     # 83 nominal / 132 anomalous
+</pre>
+      </div>
+      <div class="card">
+        <h3>Resources</h3>
+        <ul style="padding-left:18px;margin:0;line-height:1.9">
+          <li><a href="docs.html">Documentation</a>: installation, data format, labels, XML schema</li>
+          <li><a href="docs.html#metrics">Dictionary of the 171 metrics</a></li>
+          <li><a href="docs.html#catalog">Catalog of the 215 experiments</a></li>
+          <li><a href="https://github.com/scality/shad/blob/main/notebooks/getting_started.ipynb">Getting-started notebook</a></li>
+          <li><a href="https://github.com/scality/shad/blob/main/examples/baseline_detector.py">A 60-line baseline detector</a></li>
+          <li><a href="https://github.com/TheDatumOrg/TSB-AD">TSB-AD</a> for the detector implementations and VUS-PR</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ CITE -->
+<section class="block" id="cite">
+  <div class="container">
+    <div class="eyebrow">Citation</div>
+    <h2>Cite SHAD</h2>
+    <p class="lead">If you use SHAD in your research, please cite:</p>
+<pre class="bibtex" data-lang="bibtex">
+@inproceedings{stanzione2026shad,
+  title     = {Detect, Explain, Interpret: An End-to-End Benchmark for Time Series
+               Anomaly Detection, Explainability and Interpretability},
+  author    = {Stanzione, Roberto and Barbe, Jules and Parrino, Magali and
+               Fourmann, J{\'e}r{\'e}mie and Boniol, Paul},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS),
+               Evaluations and Datasets Track},
+  year      = {2026}
+}
+</pre>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <div>SHAD · data and code released under <a href="https://github.com/scality/shad/blob/main/LICENSE">AGPL-3.0</a></div>
+    <div>Inria · ENS · CNRS · PSL · Scality · EDF</div>
+  </div>
+</footer>
+
+<script src="assets/common.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/home.js"></script>
+</body>
+</html>
