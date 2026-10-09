@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHAD Explorer</title>
+<meta name="description" content="Browse the 215 multivariate time series of the SHAD benchmark: 171 dimensions, per-dimension anomaly labels and expert annotations.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a78d6'/%3E%3Cpath d='M5 20 L10 20 L13 11 L17 24 L20 16 L27 16' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/vendor/uPlot.min.css">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  body { background: var(--bg); }
+  .layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); min-height: calc(100vh - 56px); }
+  .sidebar { border-right: 1px solid var(--border); background: var(--surface); display: flex; flex-direction: column;
+    position: sticky; top: 56px; height: calc(100vh - 56px); }
+  .side-head { padding: 14px 14px 10px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .side-head .row { display: flex; gap: 8px; }
+  .side-head select { flex: 1 1 0; min-width: 0; width: 0; }
+  .side-count { gap: 8px; font-size: .78rem; color: var(--text-3); display: flex; justify-content: space-between; align-items: center; }
+  .side-count label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+  .list { overflow-y: auto; flex: 1; }
+  .list-group { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; color: var(--text-3);
+    padding: 10px 14px 4px; position: sticky; top: 0; background: var(--surface); z-index: 1; display: flex; align-items: center; gap: 6px; }
+  .item { display: block; padding: 7px 14px 8px; border-left: 3px solid transparent; cursor: pointer; color: var(--text); }
+  .item:hover { background: var(--surface-2); text-decoration: none; }
+  .item.active { background: var(--accent-soft); border-left-color: var(--accent); }
+  .item .top { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+  .item .sid { font-family: var(--mono); font-size: .82rem; font-weight: 500; }
+  .item .meta { font-size: .72rem; color: var(--text-3); white-space: nowrap; }
+  .mini { position: relative; height: 5px; background: var(--surface-3); border-radius: 3px; margin-top: 5px; overflow: hidden; }
+  .mini span { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+  .main { padding: 20px 24px 60px; min-width: 0; }
+  .head-card { display: grid; gap: 10px; }
+  .title-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .title-row h1 { font-size: 1.5rem; margin: 0; font-family: var(--mono); font-weight: 600; letter-spacing: -0.02em; }
+  .explanation { font-size: .95rem; color: var(--text); background: var(--surface-2); border-radius: 8px; padding: 10px 12px; margin: 0; }
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px 16px; }
+  .meta-grid div { font-size: .78rem; color: var(--text-3); }
+  .meta-grid b { display: block; font-size: .95rem; color: var(--text); font-weight: 600; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .actions .btn { padding: 6px 12px; font-size: .84rem; }
+  .section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 26px 0 10px; }
+  .section-title h2 { font-size: 1.1rem; margin: 0; }
+  .ev-row { cursor: pointer; }
+  .heat-wrap { position: relative; display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 0 8px; }
+  .heat-legend-levels { position: relative; }
+  .heat-legend-levels div { position: absolute; right: 0; font-size: .72rem; color: var(--text-2); text-align: right; border-right: 3px solid var(--border); padding-right: 6px; display: flex; align-items: center; justify-content: flex-end; line-height: 1.1; }
+  canvas#heat { width: 100%; display: block; border-radius: 4px; cursor: crosshair; image-rendering: pixelated; }
+  .heat-x { display: flex; justify-content: space-between; font-size: .72rem; color: var(--text-3); margin-top: 4px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chip { border: 1px solid var(--border); background: var(--surface); color: var(--text-2); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: .8rem; cursor: pointer; }
+  .chip:hover { color: var(--text); border-color: var(--text-3); }
+  .chip.on { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .dim-picker { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .dim-list { max-height: 260px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); columns: 3 260px; column-gap: 12px; padding: 6px 10px; }
+  .dim-list .grp { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); font-weight: 600; margin: 8px 0 2px; break-after: avoid; }
+  .dim-list label { display: flex; gap: 6px; align-items: center; font-size: .78rem; font-family: var(--mono); padding: 1px 0; cursor: pointer; break-inside: avoid; color: var(--text-2); }
+  .dim-list label.lab { color: var(--text); font-weight: 500; }
+  .dim-list label.lab::after { content: ""; width: 7px; height: 7px; border-radius: 2px; background: var(--anomaly); flex: none; }
+  .plots { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 12px; }
+  .plot { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 6px 2px 4px; min-width: 0; }
+  .plot-h { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 0 6px 4px 8px; }
+  .plot-h .n { font-family: var(--mono); font-size: .78rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .plot-h .u { font-size: .72rem; color: var(--text-3); white-space: nowrap; }
+  .plot-h button { border: none; background: none; color: var(--text-3); cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 2px; }
+  .plot-h button:hover { color: var(--text); }
+  .plot .desc { font-size: .72rem; color: var(--text-3); padding: 0 8px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .u-legend { display: none; }
+  .uplot, .uplot * { font-family: var(--sans); }
+  .status { padding: 40px; text-align: center; color: var(--text-2); }
+  .spinner { width: 22px; height: 22px; border: 3px solid var(--surface-3); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .readout { font-size: .8rem; color: var(--text-2); min-height: 1.4em; font-family: var(--mono); }
+  .legend-inline { display: flex; gap: 14px; flex-wrap: wrap; font-size: .78rem; color: var(--text-2); }
+  .legend-inline span { display: inline-flex; gap: 6px; align-items: center; }
+  .sw2 { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; max-height: 360px; border-right: none; border-bottom: 1px solid var(--border); }
+    .main { padding: 16px; }
+    .plots { grid-template-columns: 1fr; }
+    .heat-wrap { grid-template-columns: 1fr; }
+    .heat-legend-levels { display: none; }
+  }
+</style>
+</head>
+<body>
+<header id="nav"></header>
+<div class="layout">
+  <aside class="sidebar" aria-label="Series list">
+    <div class="side-head">
+      <input class="input" id="q" type="search" placeholder="Search id, store, disk, text…" aria-label="Search series">
+      <div class="row">
+        <select class="input" id="f-group" aria-label="Filter by scenario"><option value="">All scenarios</option></select>
+        <select class="input" id="f-crit" aria-label="Filter by criticality">
+          <option value="">Any criticality</option><option>None</option><option>Low</option><option>Medium</option><option>High</option>
+        </select>
+      </div>
+      <div class="side-count"><span id="count"></span>
+        <label><input type="checkbox" id="f-broken"> hide broken telemetry</label></div>
+    </div>
+    <nav class="list" id="list"></nav>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="status" id="status"><div class="spinner"></div>Loading catalog…</div>
+    <div id="content" hidden>
+      <div class="card head-card">
+        <div class="title-row"><h1 id="s-id"></h1><span id="s-badges" style="display:flex;gap:6px;flex-wrap:wrap"></span></div>
+        <p class="explanation" id="s-expl"></p>
+        <div class="meta-grid" id="s-meta"></div>
+        <div class="actions" id="s-actions"></div>
+      </div>
+
+      <div id="events-block">
+        <div class="section-title"><h2>Annotated anomaly events</h2><span class="muted small">From the XML annotation · click a row to plot the dimensions it affects</span></div>
+        <div class="table-wrap" style="max-height:none"><table class="data" id="events"></table></div>
+      </div>
+
+      <div class="section-title">
+        <h2>All 171 dimensions at a glance</h2>
+        <div class="controls">
+          <button class="chip on" id="t-labels" aria-pressed="true">Show labels</button>
+          <button class="chip" id="t-norm" aria-pressed="false" title="Colour by distance to the median, in robust standard deviations">Deviation view</button>
+        </div>
+      </div>
+      <div class="card" style="padding:14px 16px">
+        <div class="legend-inline" style="margin-bottom:8px">
+          <span><span class="sw2" style="background:linear-gradient(90deg,#cde2fb,#104281)"></span>value (per-dimension scale)</span>
+          <span><span class="sw2" style="background:var(--anomaly)"></span>per-dimension label</span>
+          <span><span class="sw2" style="background:repeating-linear-gradient(45deg,var(--surface-3) 0 2px,transparent 2px 4px)"></span>missing</span>
+          <span class="muted">Rows follow the canonical column order. Hover to read, click a row to plot it.</span>
+        </div>
+        <div class="heat-wrap">
+          <div class="heat-legend-levels" id="heat-levels"></div>
+          <div>
+            <canvas id="heat" height="10" aria-label="Heatmap of all dimensions over time"></canvas>
+            <div class="heat-x" id="heat-x"></div>
+          </div>
+        </div>
+        <div class="readout" id="heat-readout"></div>
+      </div>
+
+      <div class="section-title">
+        <h2>Time series</h2>
+        <div class="controls" id="quick"></div>
+      </div>
+      <div class="dim-picker">
+        <input class="input" id="dim-q" type="search" placeholder="Filter the 171 dimensions (e.g. store2 latency, g1disk01, s3_)…" aria-label="Filter dimensions">
+        <div class="dim-list" id="dim-list"></div>
+        <div class="legend-inline">
+          <span><span class="sw2" style="background:var(--anomaly-soft);border:1px solid var(--anomaly-mid)"></span>anomaly ongoing (top-level label)</span>
+          <span><span class="sw2" style="background:var(--anomaly-mid)"></span>this dimension is labelled</span>
+          <span class="muted">Drag on a chart to zoom (all charts follow), double-click to reset.</span>
+        </div>
+      </div>
+      <div class="readout" id="cursor-readout" style="margin:10px 0 6px"></div>
+      <div class="plots" id="plots"></div>
+    </div>
+  </main>
+</div>
+<script src="assets/vendor/uPlot.iife.min.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/explorer.js"></script>
+</body>
+</html>

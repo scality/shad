@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHAD Documentation</title>
+<meta name="description" content="How to install, load and use the SHAD benchmark: data format, labels, XML annotations, metric dictionary, experiment catalog and evaluation protocol.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a78d6'/%3E%3Cpath d='M5 20 L10 20 L13 11 L17 24 L20 16 L27 16' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .doc { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px; max-width: 1200px; margin: 0 auto; padding: 32px 16px 80px; }
+  .toc { position: sticky; top: 76px; align-self: start; font-size: .88rem; max-height: calc(100vh - 96px); overflow: auto; }
+  .toc a { display: block; color: var(--text-2); padding: 4px 10px; border-left: 2px solid var(--border); }
+  .toc a:hover { color: var(--text); text-decoration: none; border-left-color: var(--text-3); }
+  .toc a.on { color: var(--accent-ink); border-left-color: var(--accent); font-weight: 500; }
+  .toc .sub { padding-left: 22px; font-size: .84rem; }
+  article { min-width: 0; max-width: 900px; }
+  article h1 { font-size: 2.1rem; margin: 0 0 8px; letter-spacing: -0.02em; }
+  article h2 { margin-top: 56px; padding-top: 8px; font-size: 1.5rem; }
+  article h3 { margin-top: 28px; }
+  article p, article li { color: var(--text); }
+  article ul { padding-left: 20px; }
+  .note { border: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 14px 0; font-size: .92rem; }
+  .note.warn { border-left-color: #eda100; }
+  table.spec { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 12px 0; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  table.spec th, table.spec td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+  table.spec th { background: var(--surface-2); font-weight: 600; color: var(--text-2); }
+  table.spec td code { white-space: nowrap; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; align-items: center; }
+  .toolbar .input { max-width: 320px; }
+  .count { font-size: .82rem; color: var(--text-3); margin-left: auto; }
+  td.mono, .mono { font-family: var(--mono); font-size: .8rem; }
+  .tree { font-family: var(--mono); font-size: .82rem; line-height: 1.6; }
+  @media (max-width: 900px) { .doc { grid-template-columns: 1fr; } .toc { display: none; } }
+</style>
+</head>
+<body>
+<header id="nav"></header>
+<div class="doc">
+  <nav class="toc" id="toc" aria-label="On this page">
+    <a href="#install">Installation</a>
+    <a href="#quickstart">Quick start</a>
+    <a href="#layout">Repository layout</a>
+    <a href="#format">Data format</a>
+    <a class="sub" href="#csv">CSV files</a>
+    <a class="sub" href="#labels">Labels</a>
+    <a class="sub" href="#xml">XML annotations</a>
+    <a class="sub" href="#time">Time reference</a>
+    <a href="#scenarios">Scenarios</a>
+    <a href="#metrics">Metric dictionary</a>
+    <a href="#catalog">Experiment catalog</a>
+    <a href="#protocol">Evaluation protocol</a>
+    <a href="#reproduce">Reproducing the paper</a>
+    <a href="#caveats">Known caveats</a>
+    <a href="#website">This website</a>
+    <a href="#cite">Citation &amp; license</a>
+  </nav>
+
+  <article>
+    <h1>Documentation</h1>
+    <p class="muted">Everything needed to load SHAD, understand its labels and annotations, and reproduce the paper's evaluation.</p>
+
+    <!-- ======================================================== -->
+    <h2 id="install">Installation</h2>
+    <p>The data (≈ 550 MB of CSV and 31 MB of XML) lives in the Git repository. Clone it, then install the small Python helper package
+      (it only depends on <code>numpy</code> and <code>pandas</code>):</p>
+<pre data-lang="bash">
+git clone https://github.com/scality/shad.git
+cd shad
+pip install -e .              # core loader
+pip install -e ".[plot]"      # + matplotlib, for Series.plot()
+python -m shad                # sanity check: prints the dataset summary
+</pre>
+    <div class="note">You do not need the package to use SHAD: every series is a plain CSV file and every annotation a plain XML file (see
+      <a href="#format">Data format</a>). The package only saves you the parsing and harmonises a few inconsistencies.</div>
+    <p>The loader locates the data automatically when you run from inside the repository. Otherwise pass <code>SHAD(root="/path/to/shad")</code>
+      or set the <code>SHAD_ROOT</code> environment variable.</p>
+
+    <!-- ======================================================== -->
+    <h2 id="quickstart">Quick start</h2>
+<pre data-lang="python">
+from shad import SHAD
+
+ds = SHAD()
+ds.summary()                    # series per scenario, with type / category / criticality
+ds.catalog.head()               # one row per series (id, group, explanation, paths, ...)
+
+s = ds.load("1773343796")       # -> shad.Series
+s.data          # (n, 171) DataFrame, UTC DatetimeIndex, 1-minute sampling
+s.labels        # (n, 171) per-dimension binary labels (same columns as data)
+s.label         # (n,)     top-level binary label
+s.X, s.Y, s.y   # the same as numpy arrays
+s.segments()    # [(201, 291)] anomalous intervals as row indices (end exclusive)
+s.anomalous_dimensions          # the 4 labelled dimensions of store1/g2disk01
+s.events                        # [AnomalyEvent(offset_minutes=210, duration_minutes=90, store='1', disk='g2disk01', ...)]
+s.annotation.descriptions["store1-g2disk01-disk_read_bytes"]
+s.plot()                        # matplotlib figure of the labelled dimensions
+
+ds.load("1774026259", fill="ffill")        # impute missing values ("ffill", "interpolate", "zero")
+ds.filter(type="Disk", criticality="High") # ids matching metadata
+train_ids, test_ids = ds.split()           # 83 nominal / 132 anomalous (paper protocol)
+</pre>
+    <p>A complete walk-through is available in the
+      <a href="https://github.com/scality/shad/blob/main/notebooks/getting_started.ipynb">getting-started notebook</a>, and a
+      60-line semi-supervised baseline (detection + explanation) in
+      <a href="https://github.com/scality/shad/blob/main/examples/baseline_detector.py"><code>examples/baseline_detector.py</code></a>.</p>
+    <h3>Without the package</h3>
+<pre data-lang="python">
+import pandas as pd
+import xml.etree.ElementTree as ET
+
+df = pd.read_csv("Dataset/Single Disk/1773343796.csv", parse_dates=["metric_timestamp"])
+metrics = [c for c in df.columns if c != "metric_timestamp" and not c.startswith("label")]
+X = df[metrics].to_numpy()                          # (n, 171)
+Y = df[["label_" + m for m in metrics]].to_numpy()  # (n, 171) per-dimension labels
+y = df["label"].to_numpy()                          # (n,)     top-level label
+
+root = ET.parse("Annotations/1773343796.xml").getroot()
+print(root.findtext("type"), root.findtext("criticality"), root.findtext("textual_explanation"))
+</pre>
+
+    <!-- ======================================================== -->
+    <h2 id="layout">Repository layout</h2>
+<pre class="tree" data-lang="text">
+shad/
+├── Dataset/                 215 CSV files, one folder per scenario
+│   ├── Nominal/             83 series without anomaly
+│   ├── Single Disk/ ... Asynchronous SNode/
+├── Annotations/             215 XML files, one per series (&lt;id&gt;.xml)
+├── Representations/         Catch22 features and multi-panel images (LLM experiment inputs)
+├── Scripts/                 representation, LLM interpretability and website-building scripts
+├── shad/                    Python loader package (pip install -e .)
+├── notebooks/               getting_started.ipynb
+├── examples/                quickstart.py, baseline_detector.py
+├── tests/                   pytest sanity checks of the files and the loader
+└── docs/                    this website (GitHub Pages)
+</pre>
+    <p>A series is identified by its <b>id</b>: the Unix timestamp at which the experiment was launched (e.g. <code>1773343796</code>).
+      The same id names its CSV file (<code>Dataset/&lt;scenario&gt;/&lt;id&gt;.csv</code>), its annotation (<code>Annotations/&lt;id&gt;.xml</code>),
+      and its representations.</p>
+
+    <!-- ======================================================== -->
+    <h2 id="format">Data format</h2>
+    <h3 id="csv">CSV files</h3>
+    <p>Each CSV has <b>344 columns</b> and ~1,000–1,070 rows (one per minute over ~18 hours):</p>
+    <table class="spec">
+      <tr><th>Column(s)</th><th>Count</th><th>Content</th></tr>
+      <tr><td><code>metric_timestamp</code></td><td>1</td><td>UTC timestamp, e.g. <code>2026-03-12 19:40:00.053000+00:00</code>. Nominal sampling period: 60 s.</td></tr>
+      <tr><td><code>&lt;metric&gt;</code></td><td>171</td><td>Telemetry values, see the <a href="#metrics">metric dictionary</a>. Order: 17 platform, 13 S3, 57 server, 84 device metrics.</td></tr>
+      <tr><td><code>label_&lt;metric&gt;</code></td><td>171</td><td>Per-dimension binary label of the corresponding metric (same order).</td></tr>
+      <tr><td><code>label</code></td><td>1</td><td>Top-level binary label.</td></tr>
+    </table>
+    <p>Metric names follow <code>&lt;metric&gt;</code> (platform and S3 levels), <code>&lt;store&gt;-&lt;metric&gt;</code> (server level, e.g.
+      <code>store2-latency_sent_milliseconds</code>) and <code>&lt;store&gt;-&lt;device&gt;-&lt;metric&gt;</code> (device level, e.g.
+      <code>store1-g2disk01-disk_read_bytes</code>), with stores <code>store1</code>–<code>store3</code> and devices
+      <code>g1disk01</code>, <code>g1disk02</code>, <code>g2disk01</code>, <code>g2disk02</code> (NVMe data disks), <code>ssd01</code>, <code>ssd02</code> (metadata SSDs) and <code>root</code> (OS disk).</p>
+
+    <h3 id="labels">Labels</h3>
+    <ul>
+      <li><b>Top-level label</b> (<code>label</code>): 1 while at least one anomaly is ongoing, from injection to recovery. It is exactly the logical OR of the 171 per-dimension labels.
+        This is the label used for anomaly <i>detection</i>, in the same format as TSB-AD.</li>
+      <li><b>Per-dimension labels</b> (<code>label_&lt;metric&gt;</code>): 1 only on the dimensions of the <i>root-cause component</i> directly targeted by an ongoing anomaly
+        (e.g. the 4 metrics of a failed disk, or the 47 server and device metrics of an isolated server). Other dimensions may react to the anomaly (cluster-wide latency, rebuild tasks on other servers, ...) without being labelled.
+        These labels are the ground truth for <i>explanation</i>.</li>
+      <li>Failures that were never recovered (some disks in the simultaneous / asynchronous disk scenarios) stay labelled until the end of the series.</li>
+    </ul>
+
+    <h3 id="xml">XML annotations</h3>
+<pre data-lang="xml">
+&lt;dataset&gt;
+  &lt;id&gt;…&lt;/id&gt;                               experiment id
+  &lt;anomaly_presence&gt;true|false&lt;/anomaly_presence&gt;
+  &lt;category&gt;None|Single|Simultaneous|Asynchronous|Degradation&lt;/category&gt;
+  &lt;type&gt;None|Disk|Server|SNode&lt;/type&gt;
+  &lt;criticality&gt;None|Low|Medium|High&lt;/criticality&gt;
+  &lt;textual_explanation&gt;…&lt;/textual_explanation&gt;   free-text description written by the operators
+  &lt;dimensions&gt;
+    &lt;dimension&gt;                             one per column (timestamp + 171 metrics)
+      &lt;name&gt;…&lt;/name&gt;
+      &lt;description&gt;…&lt;/description&gt;       unit and meaning of the metric
+      &lt;anomalies&gt;                         empty unless the dimension is a root-cause target
+        &lt;anomaly&gt;
+          &lt;offset_minutes&gt;…&lt;/offset_minutes&gt;       onset (minutes after the workload start)
+          &lt;duration_minutes&gt;…&lt;/duration_minutes&gt;   duration, "None" if never recovered
+          &lt;store&gt;1|2|3&lt;/store&gt;                      targeted storage server
+          &lt;disk&gt;…&lt;/disk&gt;                           targeted disk (disk failures only)
+          &lt;degradation&gt;…&lt;/degradation&gt;             max delay (server degradations only)
+          &lt;related_dimensions&gt;                     all dimensions affected by the same event
+            &lt;dimension&gt;…&lt;/dimension&gt; …
+</pre>
+    <p>With the package, <code>Annotation.events</code> returns the list of unique events (deduplicated across dimensions), and
+      <code>Annotation.related_dimensions(dim)</code> the dimensions sharing an event with <code>dim</code>.</p>
+
+    <h3 id="time">Time reference</h3>
+    <div class="note">The <code>starting at …</code> time in the textual explanation is the <b>launch</b> of the experiment; the workload and the telemetry
+      start ~11 minutes later. <code>offset_minutes</code> is counted from the <b>first CSV timestamp</b> and matches the start of the labelled periods within a
+      few minutes. Rows are <i>not</i> always exactly one minute apart (monitoring gaps of a few minutes occur), so always use the timestamps
+      or the label columns — not row indices — to locate anomalies precisely.</div>
+
+    <!-- ======================================================== -->
+    <h2 id="scenarios">Scenarios</h2>
+    <p>Criticality is determined by the scenario. Onsets span 30 min to 16.5 h after the start; durations range from 1 minute to more than 9 hours.</p>
+    <table class="spec" id="scenario-table"></table>
+    <ul>
+      <li><b>Disk failures</b>: the NVMe disk is detached from the OS (lazy unmount + driver unbind); recovery rebinds the driver and triggers a RING disk replacement and rebuild. <i>Asynchronous</i> events are <i>cascading</i> (overlapping), <i>rolling</i> (partially overlapping) or <i>independent</i>.</li>
+      <li><b>Server failures</b>: Linux <code>tc</code>/<code>netem</code> on the target server — 100% packet loss (<i>single</i>, <i>asynchronous</i>), or delay and loss ramped <i>linearly</i> or in <i>stages</i> (<i>degradation</i>, 0.1 ms–1 s delay, 0–30% loss).</li>
+      <li><b>Storage node failures</b>: 1–3 of the 6 storage-node processes of a server are killed (SIGABRT) and later restarted.</li>
+    </ul>
+
+    <!-- ======================================================== -->
+    <h2 id="metrics">Metric dictionary</h2>
+    <p>The 171 dimensions, identical in every series. Also available as <code>shad.metrics_table()</code> and in
+      <a href="https://github.com/scality/shad/blob/main/docs/METRICS.md">docs/METRICS.md</a>.</p>
+    <div class="toolbar">
+      <input class="input" id="m-q" type="search" placeholder="Search metrics…" aria-label="Search metrics">
+      <select class="input" id="m-level" aria-label="Filter by level"><option value="">All levels</option><option value="platform">Platform</option><option value="s3">S3</option><option value="server">Server</option><option value="device">Device</option></select>
+      <span class="count" id="m-count"></span>
+    </div>
+    <div class="table-wrap"><table class="data" id="m-table"></table></div>
+
+    <!-- ======================================================== -->
+    <h2 id="catalog">Experiment catalog</h2>
+    <p>All 215 series. Click a column header to sort, an id to open it in the <a href="explorer.html">explorer</a>. Also available as
+      <code>SHAD().catalog</code> and in <a href="https://github.com/scality/shad/blob/main/docs/EXPERIMENTS.md">docs/EXPERIMENTS.md</a>.</p>
+    <div class="toolbar">
+      <input class="input" id="c-q" type="search" placeholder="Search id, cluster, store, text…" aria-label="Search experiments">
+      <select class="input" id="c-group" aria-label="Filter by scenario"><option value="">All scenarios</option></select>
+      <span class="count" id="c-count"></span>
+    </div>
+    <div class="table-wrap"><table class="data" id="c-table"></table></div>
+
+    <!-- ======================================================== -->
+    <h2 id="protocol">Evaluation protocol</h2>
+    <h3>Detection</h3>
+    <ul>
+      <li><b>Split</b>: semi-supervised methods are trained on the 83 nominal series; all methods are evaluated on the 132 anomalous series (<code>SHAD().split()</code>).</li>
+      <li><b>Metric</b>: VUS-PR with a 25-point buffer, computed on the top-level label. Detector implementations and tuned hyper-parameters come from <a href="https://github.com/TheDatumOrg/TSB-AD">TSB-AD</a>.</li>
+      <li><b>Methods</b>: 10 semi-supervised (AE, OmniAnomaly, USAD, CNN, LSTM, OCSVM, TimesNet, FITS, MCD, Anomaly Transformer) and 8 unsupervised (KMeansAD, PCA, CBLOF, KNN, HBOS, LOF, Isolation Forest, Robust PCA).</li>
+    </ul>
+    <h3>Explanation</h3>
+    <ul><li>Per-dimension contributions to the anomaly score are ranked and compared with the per-dimension labels using <b>NDCG</b>.</li></ul>
+    <h3>Interpretation</h3>
+    <ul>
+      <li>Each series is given to a frozen LLM as (i) Catch22 features per dimension, (ii) a multi-panel image, or (iii) an LLM-written description of that image.</li>
+      <li>The LLM answers a questionnaire: anomaly presence, one affected dimension, time range, type (disk / server / storage node), criticality. Scored with F1 (presence, type, criticality) and accuracy (dimension, time), averaged over 5 runs.</li>
+      <li>Two supervision levels simulate an end-to-end pipeline: <i>level 1</i> gives the anomaly presence, <i>level 2</i> also gives the affected components.</li>
+    </ul>
+
+    <!-- ======================================================== -->
+    <h2 id="reproduce">Reproducing the paper</h2>
+    <table class="spec">
+      <tr><th>Script</th><th>Purpose</th></tr>
+      <tr><td><code>Scripts/query_XML.py</code></td><td>Examples of XML queries (global info, dimensions, anomalies by store, degradation, related dimensions).</td></tr>
+      <tr><td><code>Scripts/generate_images.py</code></td><td>Multi-panel image of each series → <code>Representations/Images/</code>.</td></tr>
+      <tr><td><code>Scripts/compute_features.py</code></td><td>Catch22 features of every dimension → <code>Representations/Catch22/</code> (needs <code>pycatch22</code>).</td></tr>
+      <tr><td><code>Scripts/interpretabiliy_main.py</code></td><td>LLM interpretability experiment for the three representations (needs <code>mistralai</code>, <code>python-dotenv</code> and a <code>MISTRAL_API_KEY</code> in <code>.env</code>).</td></tr>
+      <tr><td><code>Scripts/check_consistency.py</code></td><td>Cross-checks CSV labels against XML annotations.</td></tr>
+      <tr><td><code>Scripts/build_site_data.py</code></td><td>Regenerates the JSON files of this website and the markdown catalogs.</td></tr>
+    </table>
+<pre data-lang="bash">
+pip install -e ".[interpretability]"
+echo "MISTRAL_API_KEY=..." > .env
+python Scripts/interpretabiliy_main.py      # run from the repository root
+</pre>
+
+    <!-- ======================================================== -->
+    <h2 id="caveats">Known caveats</h2>
+    <ul>
+      <li><b>Missing values.</b> Less than 1% of the values are missing. This occurs as the anomalies happen in a real world system. The loader keeps them as <code>NaN</code>; use <code>fill=</code> to impute.</li>
+      <li><b>Unplanned crashes, Permanent disk losses, telemetry issues.</b> Few experiments show anomalies that were not fixed as planned and lasted much longer, or problems with some telemetries not working as expected. All these experiments were re-run, and both versions are included (the unplanned versions are annotated). </li>
+    </ul>
+
+    <!-- ======================================================== -->
+    <h2 id="website">This website</h2>
+    <p>The site is static (HTML + vanilla JS, no build step) and lives in <code>docs/</code>. The explorer reads the CSV and XML files straight from the repository
+      (<code>raw.githubusercontent.com</code>), so nothing is duplicated.</p>
+<pre data-lang="bash">
+python Scripts/build_site_data.py     # after any change in Dataset/ or Annotations/
+python -m http.server 8000            # from the repository root, then open http://localhost:8000/docs/
+</pre>
+    <p>Locally, the explorer reads <code>../Dataset</code> directly. To publish: <i>Settings → Pages → Deploy from a branch → main / docs</i>.</p>
+
+    <!-- ======================================================== -->
+    <h2 id="cite">Citation &amp; license</h2>
+<pre data-lang="bibtex">
+@inproceedings{stanzione2026shad,
+  title     = {Detect, Explain, Interpret: An End-to-End Benchmark for Time Series
+               Anomaly Detection, Explainability and Interpretability},
+  author    = {Stanzione, Roberto and Barbe, Jules and Parrino, Magali and
+               Fourmann, J{\'e}r{\'e}mie and Boniol, Paul},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS),
+               Evaluations and Datasets Track},
+  year      = {2026}
+}
+</pre>
+    <p>Data and code are released under the <a href="https://github.com/scality/shad/blob/main/LICENSE">AGPL-3.0-only</a> license.</p>
+  </article>
+</div>
+<footer>
+  <div class="container">
+    <div>SHAD · data and code released under <a href="https://github.com/scality/shad/blob/main/LICENSE">AGPL-3.0</a></div>
+    <div>Inria · ENS · CNRS · PSL · Scality · EDF</div>
+  </div>
+</footer>
+<script src="assets/common.js"></script>
+<script src="assets/docs.js"></script>
+</body>
+</html>
