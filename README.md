@@ -195,4 +195,4 @@ If you use SHAD, please cite:
 The source code and datasets are released under the **AGPL-3.0-only** license. By using, modifying or redistributing this
 material you agree to the terms of the license, available in [LICENSE](LICENSE).
 
-SHAD is a collaboration between [Inria](https://www.inria.fr/) (ENS, CNRS, PSL University), [Scality](https://www.scality.com/) and EDF.
+SHAD is a collaboration between [Inria](https://www.inria.fr/) (ENS, CNRS, PSL University), [Scality](https://www.scality.com/).
