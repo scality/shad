@@ -157,5 +157,5 @@ def demo(xml_path):
 # RUN SCRIPT
 # -----------------------------
 if __name__ == "__main__":
-    example_file = "Annotations/1774478743.xml"
+    example_file = "../Annotations/1774478743.xml"
     demo(example_file)
